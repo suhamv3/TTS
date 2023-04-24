@@ -179,6 +179,27 @@ def details():
 
 lock = Lock()
 
+@app.route("/api/changemodel", methods=["GET"])
+def changemodel():
+    global synthesizer
+
+    model_path = request.args.get("model_path", "")
+    config_path = request.args.get("config_path", "")
+
+    synthesizer = Synthesizer(
+        tts_checkpoint=model_path,
+        tts_config_path=config_path,
+        tts_speakers_file=speakers_file_path,
+        tts_languages_file=None,
+        vocoder_checkpoint=vocoder_path,
+        vocoder_config=vocoder_config_path,
+        encoder_checkpoint="",
+        encoder_config="",
+        use_cuda=args.use_cuda,
+    )
+
+    return render_template_string("success")
+
 
 @app.route("/api/tts", methods=["GET"])
 def tts():
